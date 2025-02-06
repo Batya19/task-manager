@@ -23,13 +23,15 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+// if (app.Environment.IsDevelopment())
+// {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+// }
 
 app.UseCors();
+
+app.MapGet("/", (ToDoDbContext db) => "Server is running!");
 
 app.MapGet("/items", async (ToDoDbContext db) => {
     return await db.Items.ToListAsync();
