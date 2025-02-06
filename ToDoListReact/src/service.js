@@ -3,7 +3,6 @@ import axios from 'axios';
 const apiUrl = "http://localhost:5235"
 axios.defaults.baseURL = apiUrl;
 
-
 axios.interceptors.response.use(
   response => response,
   error => {
@@ -19,7 +18,6 @@ export default {
   },
 
   addTask: async (name) => {
-    console.log('addTask', name)
     const result = await axios.post(`${apiUrl}/items`, { name })
     return result.data;
   },
@@ -27,14 +25,13 @@ export default {
   setCompleted: async (id, isComplete, name) => {
     const result = await axios.put(`${apiUrl}/items/${id}`, {
       isComplete,
-      Name: name 
+      Name: name
     });
     return result.data;
   },
+
   deleteTask: async (id) => {
-    console.log('deleteTask', id);
     await axios.delete(`/items/${id}`);
     return { message: 'Task deleted successfully' };
   }
-
 };

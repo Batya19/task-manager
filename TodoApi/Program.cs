@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration["ToDoDB"];
+
 builder.Services.AddDbContext<ToDoDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
@@ -41,26 +42,26 @@ app.MapPost("/items",async (ToDoDbContext db, Item item) => {
 });
 
 app.MapPut("/items/{id}",async (int id, Item updatedItem, ToDoDbContext db) => {
-    var task = await db.Items.FindAsync(id);
-    if (task == null) {
+    var item = await db.Items.FindAsync(id);
+    if (item == null) {
         return Results.NotFound();
     }
-    task.Name = updatedItem.Name;
-    task.IsComplete = updatedItem.IsComplete;
+    item.Name = updatedItem.Name;
+    item.IsComplete = updatedItem.IsComplete;
    
     await db.SaveChangesAsync();
-    return Results.Ok(task); 
+    return Results.Ok(item); 
 });
 
 app.MapDelete("/items/{id}", async (int id, ToDoDbContext db) => {
-    var task = await db.Items.FindAsync(id);
-    if (task == null) {
+    var item = await db.Items.FindAsync(id);
+    if (item == null) {
         return Results.NotFound(); 
     }
 
-    db.Items.Remove(task);
+    db.Items.Remove(item);
     await db.SaveChangesAsync();
-    return Results.Ok("task deleted successfully");
+    return Results.Ok("item deleted successfully");
 });
 
 app.Run();
